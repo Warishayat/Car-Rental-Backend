@@ -5,6 +5,7 @@ const body_parser = require('body-parser')
 const ConnectDB = require('./Config/database')
 const auth_router = require('./Routes/auth_route');
 const contact_router = require('./Routes/contact_route');
+const car_router = require('./Routes/car_route')
 
 
 const app = express()
@@ -27,6 +28,7 @@ app.get("/",(req,res)=>{
 
 app.use('/auth/',auth_router);
 app.use('/admin/',contact_router);
+app.use('/car/',car_router)
 
 
 app.listen(port,()=>{

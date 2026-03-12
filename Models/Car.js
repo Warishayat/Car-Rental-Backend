@@ -10,13 +10,17 @@ const CarSchema = new Schema(
       type: String,
       required: true,
     },
-    price_per_Day: {
+    price_per_day: {
       type: Number,
       required: true,
     },
     availability: {
       type: Boolean,
       default: true,
+    },
+    image:{
+      type:[String],
+      required:true
     },
   },
   { timestamps: true },
