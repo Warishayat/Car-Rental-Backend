@@ -27,4 +27,24 @@ const ContactUs = async (req, res) => {
   }
 };
 
-module.exports = { ContactUs };
+
+const getallContact = async(req,res)=>{
+  try {
+    const all_messages = await Contact.find()
+  if (all_messages.legth===0){
+    return res.status(404).json({
+        message:"No message received till now"
+    })
+  }
+  return res.status(200).json({
+    message:"All messages fetched successfully",
+    all_messages
+  })
+  } catch (error) {
+    return res.status(500).json({
+      message:error
+    })
+  }
+}
+
+module.exports = { ContactUs,getallContact };
