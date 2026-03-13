@@ -1,73 +1,182 @@
-# 🚗 Car Rent System - Backend
+# 🚗 Car Rental Backend API
 
-A **Node.js + Express + MongoDB** backend for a Car Rental System.
-This API allows users to view cars, book them, and admins to manage cars and bookings.
+A production-ready backend for a **Car Rental System** built using **Node.js, Express, MongoDB, and Redis**.
+This project provides secure authentication, car management, booking functionality, caching, rate limiting, and full API documentation with Swagger.
+
+The API is fully containerized using **Docker** and deployed live.
+
+---
+
+# 🌐 Live API
+
+Production URL
+
+https://car-rental-system-latest.onrender.com
+
+Swagger Documentation
+
+https://car-rental-system-latest.onrender.com/api-docs
+
+---
+
+# 📌 Features
+
+### 🔐 Authentication
+
+* User Signup
+* User Login
+* JWT based authentication
+* Protected routes
+
+### 🚘 Car Management (Admin)
+
+* Add new car with images
+* Update car details
+* Delete specific car
+* Delete all cars
+* Get car by ID
+* Get all cars
+
+### 📅 Booking System
+
+* Book a car
+* Cancel booking
+* Get user bookings
+
+### 👨‍💼 Admin Features
+
+* View all bookings
+* Cancel any booking
+* View contact messages
+
+### 📩 Contact System
+
+Users can send messages to admin with:
+
+* name
+* email
+* topic
+* message
+
+### ⚡ Performance Optimization
+
+* Redis caching for frequently accessed APIs
+* Rate limiting to prevent API abuse
+
+### 📄 API Documentation
+
+Interactive API docs using Swagger UI.
+
+### 🐳 Containerization
+
+Dockerized backend for easy deployment and scalability.
 
 ---
 
 # 🛠 Tech Stack
 
+Backend
+
 * Node.js
 * Express.js
+
+Database
+
 * MongoDB
 * Mongoose
-* Cloudinary (Image Storage)
-* Multer (File Uploads)
-* JWT Authentication
-* dotenv
+
+Caching
+
+* Redis
+
+Authentication
+
+* JWT (JSON Web Token)
+
+API Documentation
+
+* Swagger UI
+
+Containerization
+
+* Docker
+
+Deployment
+
+* Render
 
 ---
 
-# 📁 Project Structure
+# 📂 Project Structure
 
 ```
-Car-Rent-System
+Car-Rental-Backend
 │
-└── Car-Rental-Backend
-    │
-    ├── Config
-    │   ├── cloudinary.js
-    │   └── database.js
-    │
-    ├── Controllers
-    │   ├── auth_controller.js
-    │   ├── booking_controller.js
-    │   ├── car_controller.js
-    │   └── contact_controller.js
-    │
-    ├── Middleware
-    │
-    ├── Models
-    │   ├── Booking.js
-    │   ├── Car.js
-    │   ├── Contact.js
-    │   └── Users.js
-    │
-    ├── Routes
-    │   ├── auth_route.js
-    │   ├── booking_route.js
-    │   ├── car_route.js
-    │   └── contact_route.js
-    │
-    ├── index.js
-    ├── .gitignore
-    └── package.json
+├── Config
+│   ├── database.js
+│   ├── redis.js
+│   └── swagger.js
+│
+├── Controllers
+│   ├── auth_controller.js
+│   ├── booking_controller.js
+│   ├── car_controller.js
+│   └── contact_controller.js
+│
+├── Middleware
+│   ├── authMiddleware.js
+│   ├── check_admin.js
+│   ├── rateLimiter.js
+│   └── upload.js
+│
+├── Models
+│   ├── User.js
+│   ├── Car.js
+│   ├── Booking.js
+│   └── Contact.js
+│
+├── Routes
+│   ├── auth_route.js
+│   ├── booking_route.js
+│   ├── car_route.js
+│   └── contact_route.js
+│
+├── utils
+│   ├── generateInvoice.js
+│   └── sendEmail.js
+│
+├── index.js
+├── Dockerfile
+└── README.md
 ```
 
 ---
 
-# ⚙️ Installation
+# 🔑 Environment Variables
 
-Clone the repository
-
-```
-git clone https://github.com/yourusername/car-rent-system.git
-```
-
-Go into project directory
+Create a `.env` file and add:
 
 ```
-cd Car-Rental-Backend
+PORT=8000
+
+MONGO_URI=your_mongodb_connection
+
+JWT_SECRET=your_jwt_secret
+
+REDIS_URL=your_redis_url
+
+EMAIL_USER=your_email
+EMAIL_PASS=your_email_password
+```
+
+---
+
+# ⚙️ Installation (Local Setup)
+
+Clone repository
+
+```
+git clone https://github.com/yourusername/car-rental-backend.git
 ```
 
 Install dependencies
@@ -76,97 +185,116 @@ Install dependencies
 npm install
 ```
 
-Run the server
+Run server
 
 ```
-npm run dev
+npm start
 ```
 
-Server will run on:
+Server runs at
 
 ```
 http://localhost:8000
 ```
 
----
-
-# 🔑 Environment Variables
-
-Create a `.env` file in the root folder and add:
+Swagger docs
 
 ```
-PORT=8000
-MONGO_URI=your_mongodb_connection_string
-
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-
-JWT_SECRET=your_jwt_secret
+http://localhost:8000/api-docs
 ```
 
 ---
 
-# 🚀 API Modules
+# 🐳 Run With Docker
+
+Build Docker image
+
+```
+docker build -t car-rental-backend .
+```
+
+Run container
+
+```
+docker run -p 8000:8000 --env-file .env car-rental-backend
+```
+
+---
+
+# 🚀 API Endpoints
 
 ### Authentication
 
-```
-POST /auth/register
+POST /auth/signup
 POST /auth/login
-```
 
 ### Cars
 
-```
-POST /car
-GET /car
-GET /car/:id
-PATCH /car/:id
-DELETE /car/:id
-```
+GET /car/get-all-cars
+GET /car/get-all-cars/:id
+POST /car/add-car (Admin)
+PUT /car/update-car/:id (Admin)
+DELETE /car/delete-car/:id (Admin)
 
 ### Booking
 
-```
-POST /booking
-GET /booking
-DELETE /booking/:id
-```
+POST /book/book-car
+GET /book/my-booking/:id
+PATCH /book/bookings/:id/cancel
+
+### Admin
+
+GET /admin/bookings/all
+PATCH /admin/bookings/admin-cancel/:id
 
 ### Contact
 
-```
-POST /contact
-GET /contact
-```
+POST /admin/contact-us
+GET /admin/all-messages
 
 ---
 
-# ✨ Features
+# ⚡ Performance Improvements
 
-* User Authentication (JWT)
-* Car Management (Admin)
-* Car Booking System
-* Image Upload using Cloudinary
-* RESTful API Design
-* MongoDB Data Validation
+Redis caching added for:
+
+* Get all cars
+* Get car by ID
+
+Rate limiting added to protect APIs from abuse.
 
 ---
 
-# 📌 Future Improvements
+# 🔒 Security
 
-* Payment Integration
-* Booking History
-* Admin Dashboard
-* Email Notifications
-* Car Availability Tracking
+* JWT Authentication
+* Protected routes
+* Admin role authorization
+* Rate limiting
+* Input validation
+
+---
+
+# 📈 Future Improvements
+
+* Payment integration
+* Background job queue
+* Advanced search filters
+* Car availability calendar
+* Unit and integration testing
 
 ---
 
 # 👨‍💻 Author
 
-**Waris Hayat**
+Waris Hayat
 
 Backend Developer
-Node.js | Express | MongoDB
+
+GitHub: https://github.com/warishayat
+
+---
+
+# ⭐ Support
+
+If you like this project, give it a ⭐ on GitHub.
